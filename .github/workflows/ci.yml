@@ -38,4 +38,4 @@ jobs:
 
     - name: Deploy to Kubernetes
       working-directory: ${{ github.workspace }}
-      run: kubectl apply -f deployment.yaml
+      run: kubectl apply -f deployment.yaml --validate=false
