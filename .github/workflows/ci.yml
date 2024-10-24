@@ -33,5 +33,9 @@ jobs:
     needs: build
     
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Deploy to Kubernetes
+      working-directory: ${{ github.workspace }}
       run: kubectl apply -f deployment.yaml
