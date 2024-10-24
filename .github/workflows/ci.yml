@@ -30,12 +30,19 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Deploy to Kubernetes
-      working-directory: ${{ github.workspace }}
-      run: kubectl apply -f deployment.yaml --validate=false
+      - name: Set up KUBECONFIG
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECONFIG_FILE" > $HOME/.kube/config
+        env:
+          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG_FILE }}
+
+      - name: Test kubectl connection
+        run: kubectl get nodes
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f deployment.yaml
